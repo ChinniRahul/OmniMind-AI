@@ -1,0 +1,169 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Reuseable identity & boundary helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(ownerId) {
+      return isSignedIn() && request.auth.uid == ownerId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity Schema Validators
+    function isValidUser(data) {
+      return data.userId == request.auth.uid 
+        && data.email is string 
+        && data.email.size() <= 128
+        && data.displayName is string 
+        && data.displayName.size() <= 64;
+    }
+
+    function isValidChat(data) {
+      return data.chatId is string 
+        && data.chatId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.title is string 
+        && data.title.size() <= 256;
+    }
+
+    function isValidMessage(data) {
+      return data.messageId is string 
+        && data.messageId.size() <= 128
+        && data.chatId is string 
+        && data.chatId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.role in ['user', 'model']
+        && data.content is string 
+        && data.content.size() <= 50000;
+    }
+
+    function isValidDocument(data) {
+      return data.documentId is string 
+        && data.documentId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.name is string 
+        && data.name.size() <= 256
+        && data.content is string 
+        && data.content.size() <= 200000;
+    }
+
+    function isValidKnowledge(data) {
+      return data.itemId is string 
+        && data.itemId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.title is string 
+        && data.title.size() <= 256
+        && data.body is string 
+        && data.body.size() <= 50000;
+    }
+
+    function isValidNote(data) {
+      return data.noteId is string 
+        && data.noteId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.title is string 
+        && data.title.size() <= 256
+        && data.content is string 
+        && data.content.size() <= 100000;
+    }
+
+    function isValidTask(data) {
+      return data.taskId is string 
+        && data.taskId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.title is string 
+        && data.title.size() <= 256
+        && data.status in ['pending', 'completed'];
+    }
+
+    function isValidGoal(data) {
+      return data.goalId is string 
+        && data.goalId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.title is string 
+        && data.title.size() <= 256
+        && data.targetValue is number
+        && data.currentValue is number;
+    }
+
+    // Rules Mapping
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(incoming()) && incoming().createdAt == request.time;
+      allow update: if isOwner(userId) && isValidUser(incoming()) && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'theme', 'ttsVoice']);
+    }
+
+    match /chats/{chatId} {
+      allow get: if isSignedIn() && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(chatId) && isValidChat(incoming()) && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidId(chatId) && isOwner(existing().userId) && isValidChat(incoming()) && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'updatedAt']);
+      allow delete: if isSignedIn() && isValidId(chatId) && isOwner(existing().userId);
+
+      match /messages/{messageId} {
+        allow get: if isSignedIn() && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid;
+        allow list: if isSignedIn() && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid;
+        allow create: if isSignedIn() && isValidId(messageId) && isValidMessage(incoming()) && incoming().createdAt == request.time;
+        allow delete: if isSignedIn() && isValidId(messageId) && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid;
+      }
+    }
+
+    match /documents/{documentId} {
+      allow get: if isSignedIn() && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(documentId) && isValidDocument(incoming()) && incoming().createdAt == request.time;
+      allow delete: if isSignedIn() && isValidId(documentId) && isOwner(existing().userId);
+    }
+
+    match /knowledge/{itemId} {
+      allow get: if isSignedIn() && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(itemId) && isValidKnowledge(incoming()) && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidId(itemId) && isOwner(existing().userId) && isValidKnowledge(incoming()) && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'body', 'useAsMemory']);
+      allow delete: if isSignedIn() && isValidId(itemId) && isOwner(existing().userId);
+    }
+
+    match /notes/{noteId} {
+      allow get: if isSignedIn() && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(noteId) && isValidNote(incoming()) && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidId(noteId) && isOwner(existing().userId) && isValidNote(incoming()) && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'content', 'folder', 'isSynced', 'updatedAt']);
+      allow delete: if isSignedIn() && isValidId(noteId) && isOwner(existing().userId);
+    }
+
+    match /tasks/{taskId} {
+      allow get: if isSignedIn() && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(taskId) && isValidTask(incoming()) && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidId(taskId) && isOwner(existing().userId) && isValidTask(incoming()) && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description', 'status', 'dueDate', 'goalId', 'reminderEnabled']);
+      allow delete: if isSignedIn() && isValidId(taskId) && isOwner(existing().userId);
+    }
+
+    match /goals/{goalId} {
+      allow get: if isSignedIn() && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(goalId) && isValidGoal(incoming()) && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidId(goalId) && isOwner(existing().userId) && isValidGoal(incoming()) && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'targetValue', 'currentValue', 'deadline']);
+      allow delete: if isSignedIn() && isValidId(goalId) && isOwner(existing().userId);
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "OmniMind AI",
+  "description": "Premium multi-modal AI assistant workspace integrating productivity, checklists, goals, notebooks, knowledge management, and Voice/Code synthesis interfaces.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

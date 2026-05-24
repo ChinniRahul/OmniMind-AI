@@ -1,0 +1,52 @@
+{
+  "name": "OmniMind AI Workspace",
+  "short_name": "OmniMind",
+  "description": "Premium multi-modal AI assistant workspace integrating productivity, checklists, goals, notebooks, knowledge management, and Voice/Code synthesis interfaces.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07090e",
+  "theme_color": "#6366f1",
+  "orientation": "any",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/pwa-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-192-maskable.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/pwa-512-maskable.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities", "education"],
+  "shortcuts": [
+    {
+      "name": "AI Chat Console",
+      "short_name": "Chat",
+      "url": "/?tab=chat",
+      "icons": [{ "src": "/pwa-192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Personal Notebook",
+      "short_name": "Notebook",
+      "url": "/?tab=notes",
+      "icons": [{ "src": "/pwa-192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    }
+  ]
+}

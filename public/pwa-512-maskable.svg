@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Solid background covering standard maskable margins -->
+  <rect width="512" height="512" fill="#07090e" />
+  
+  <!-- Subtle gradient background radial ring -->
+  <circle cx="256" cy="256" r="140" fill="none" stroke="url(#indigoGrad3)" stroke-width="2.75" opacity="0.15" />
+  
+  <defs>
+    <radialGradient id="indigoGrad3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </radialGradient>
+    <radialGradient id="glow3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Glowing core base -->
+  <circle cx="256" cy="256" r="85" fill="url(#glow3)" />
+
+  <!-- Multi-modal AI Lattice Nodes & Connections -->
+  <g stroke="url(#indigoGrad3)" stroke-width="2.75" opacity="0.85">
+    <line x1="256" y1="180" x2="197" y2="223" />
+    <line x1="256" y1="180" x2="315" y2="223" />
+    <line x1="197" y1="223" x2="218" y2="298" />
+    <line x1="315" y1="223" x2="295" y2="298" />
+    <line x1="218" y1="298" x2="256" y2="325" />
+    <line x1="295" y1="298" x2="256" y2="325" />
+  </g>
+
+  <!-- Node Dots with brilliant gradients -->
+  <circle cx="256" cy="180" r="11" fill="#a5b4fc" filter="drop-shadow(0px 0px 5px rgba(165,180,252,0.8))" />
+  <circle cx="197" cy="223" r="9" fill="#818cf8" />
+  <circle cx="315" cy="223" r="9" fill="#818cf8" />
+  <circle cx="256" cy="256" r="13" fill="#4f46e5" filter="drop-shadow(0px 0px 7px rgba(79,70,229,0.8))" />
+  <circle cx="218" cy="298" r="9" fill="#818cf8" />
+  <circle cx="295" cy="298" r="9" fill="#818cf8" />
+  <circle cx="256" cy="325" r="11" fill="#a5b4fc" filter="drop-shadow(0px 0px 5px rgba(165,180,252,0.8))" />
+</svg>

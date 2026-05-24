@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <!-- Background with dark cosmic slate and rounded viewport -->
+  <rect width="192" height="192" rx="42" fill="#07090e" />
+  
+  <!-- Subtle gradient background radial ring -->
+  <circle cx="96" cy="96" r="64" fill="none" stroke="url(#indigoGrad)" stroke-width="1.5" opacity="0.15" />
+  <circle cx="96" cy="96" r="48" fill="none" stroke="url(#indigoGrad)" stroke-width="1" stroke-dasharray="4,4" opacity="0.3" />
+  
+  <defs>
+    <radialGradient id="indigoGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Glowing core base -->
+  <circle cx="96" cy="96" r="40" fill="url(#glow)" />
+
+  <!-- Multi-modal AI Lattice Nodes & Connections -->
+  <g stroke="url(#indigoGrad)" stroke-width="1.5" opacity="0.85">
+    <line x1="96" y1="62" x2="68" y2="82" />
+    <line x1="96" y1="62" x2="124" y2="82" />
+    <line x1="68" y1="82" x2="78" y2="118" />
+    <line x1="124" y1="82" x2="114" y2="118" />
+    <line x1="78" y1="118" x2="96" y2="130" />
+    <line x1="114" y1="118" x2="96" y2="130" />
+    
+    <!-- Inner complex cross synapses -->
+    <line x1="96" y1="62" x2="96" y2="96" stroke-width="1" opacity="0.5"/>
+    <line x1="68" y1="82" x2="124" y2="82" stroke-width="1" opacity="0.5" />
+    <line x1="78" y1="118" x2="124" y2="82" stroke-width="0.75" opacity="0.3" />
+    <line x1="114" y1="118" x2="68" y2="82" stroke-width="0.75" opacity="0.3" />
+    <line x1="96" y1="96" x2="96" y2="130" stroke-width="1" opacity="0.5"/>
+  </g>
+
+  <!-- Node Dots with brilliant gradients representing processing centers -->
+  <!-- Top: Vision/Modal Core -->
+  <circle cx="96" cy="62" r="5" fill="#a5b4fc" filter="drop-shadow(0px 0px 3px rgba(165,180,252,0.8))" />
+  <!-- Upper Left: Memory / Knowledge -->
+  <circle cx="68" cy="82" r="4" fill="#818cf8" />
+  <!-- Upper Right: Code Sync -->
+  <circle cx="124" cy="82" r="4" fill="#818cf8" />
+  <!-- Core synapse center -->
+  <circle cx="96" cy="96" r="6" fill="#4f46e5" filter="drop-shadow(0px 0px 4px rgba(79,70,229,0.8))" />
+  <!-- Bottom Left: Checklists/Tasks -->
+  <circle cx="78" cy="118" r="4" fill="#818cf8" />
+  <!-- Bottom Right: File / Context Analyzer -->
+  <circle cx="114" cy="118" r="4" fill="#818cf8" />
+  <!-- Bottom: Personal Notebook integration -->
+  <circle cx="96" cy="130" r="5" fill="#a5b4fc" filter="drop-shadow(0px 0px 3px rgba(165,180,252,0.8))" />
+</svg>
