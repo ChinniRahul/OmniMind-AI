@@ -360,4 +360,8 @@ async function initializeVite() {
   });
 }
 
-initializeVite();
+if (!process.env.VERCEL) {
+  initializeVite();
+}
+
+export default app;
